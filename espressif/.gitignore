@@ -1,0 +1,26 @@
+# ESP-IDF
+build/
+sdkconfig.old
+
+# IDEs
+.vscode/
+.idea/
+*.code-workspace
+
+# C/C++
+*.o
+*.obj
+*.out
+*.elf
+*.bin
+*.map
+*.a
+*.lib
+
+# Python (if you have scripts)
+__pycache__/
+*.pyc
+
+# Mac/Windows
+.DS_Store
+Thumbs.db
