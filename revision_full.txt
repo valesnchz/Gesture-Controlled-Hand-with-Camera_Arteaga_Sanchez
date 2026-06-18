@@ -1,0 +1,553 @@
+IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 1 IDEAL 2026 — Informe de revisión por pares · Confidencial  
+27th International Conference on Intelligent Data Engineering and 
+Automated Learning (IDEAL 2026)  
+Informe de revisión por pares  
+Comentarios línea por línea y hoja de ruta para aceptación  
+Campo  Detalle  
+Manuscrito  A Dual Approach for Optimized Hand Gesture Recognition Using MediaPipe and AI 
+Edge Deployment with ESP32 -CAM 
+Autoras  S. Arteaga; V. Sánchez. School of Biological Sciences and Engineering, Universidad 
+Yachay Tech, Ecuador  
+Congreso de destino  IDEAL 2026 — Manchester, UK (19 –21 nov. 2026). Proceedings Springer LNCS/LNAI  
+Tipo de contribución  Full paper (9 –12 páginas, formato LNCS, revisión rigurosa por pares)  
+Temas IDEAL aplicables  Machine Learning & Deep Learning; Bio -Inspired Models; Real -world Applications of 
+Intelligent Techniques and AI  
+Modalidad de revisión  Doble ciego, evaluación por originalidad, significancia, calidad y claridad  
+Estado  Pre-envío (revisión interna previa a sumisión oficial)  
+Recomendación de este 
+revisor  Reject en su estado actual / Major Revision imprescindible antes del envío. Corregir el 
+Bloque 1 íntegro.  
+Convención de 
+severidad  Mayor (M) · Moderado (m) · Menor (n)  
+Total de comentarios  38 comentarios línea por línea + 10 preguntas específicas  
+Objetivo del informe  Hoja de ruta accionable para maximizar la probabilidad de aceptación en IDEAL 2026  
+  IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 2 Carta a las autoras  
+Estimadas autoras:  
+He revisado integralmente el manuscrito sobre el sistema dual de reconocimiento de gestos de 
+mano mediante MediaPipe y despliegue AI -at-the-Edge sobre ESP32 -CAM, en el contexto de su 
+envío previsto al 27.º IDEAL (Springer LNCS/LNAI). El propósito de este i nforme es ofrecer una hoja 
+de ruta accionable y detallada para que la versión enviada supere el filtro de los revisores de IDEAL, 
+que evalúan por originalidad, significancia, calidad técnica y claridad.  
+El trabajo aborda un problema legítimo de interacción humano -máquina y tiene méritos prácticos 
+reales: integra un pipeline reproducible (MediaPipe Hands + lógica geométrica con histéresis) con 
+un despliegue embebido genuino (FOMO/Edge Impulse sobre ESP32 -CAM), reporta métricas de 
+detección y de despliegue, y entrega un prototipo físico funcional con cinco servos. La honestidad al 
+reportar las limitaciones (inferencia de 981 ms, confusión con fondo, sensibilidad a iluminación) es 
+encomiable y poco frecuente en trabajos de ingeniería aplicada.  
+Sin embargo, identifico varias preocupaciones que considero bloqueantes para una aceptación en 
+IDEAL y que deben tratarse antes del envío:  
+• Encaje (scope/fit) y posicionamiento como aporte de IDEAL. IDEAL es un congreso de 
+ingeniería de datos inteligente y aprendizaje automatizado; valora un aporte metodológico o 
+un análisis empírico riguroso, no una demostración de integración de componentes.  En su 
+forma actual el manuscrito se lee como un proyecto de ingeniería (system integration) sin 
+contribución de aprendizaje novedosa, lo que es causa frecuente de rechazo por falta de 
+novedad.  
+• Novedad insuficiente. MediaPipe Hands, FOMO sobre ESP32 -CAM y el control de servos por 
+I2C son tecnologías existentes y bien documentadas. No se identifica un delta metodológico 
+claro (ni nueva arquitectura, ni nueva función de pérdida, ni nuevo protocolo de evaluación, ni 
+dataset de valor reutilizable). La 'contribución central' declarada (mapear coordenadas de 
+píxel a posición de dedo) es ingeniería estándar.  
+• Ausencia total de comparación cuantitativa (baselines y estado del arte). El related work es 
+descriptivo y la única 'comparación' entre las dos rutas es cualitativa. No hay tabla 
+comparativa contra métodos previos ni contra baselines alternativos sobre el mismo dataset.  
+• Inconsistencias internas que comprometen la credibilidad. El número de clases oscila entre 
+dos (Open/Close) y tres (se introduce 'Index' en la Sec. 3.7 y Tabla 7 sin definirla ni evaluarla). 
+Las cifras de la matriz de confusión difieren entre la Sec. 4.2 ( CLOSE 78.6%) y la Sec. 4.4 
+(CLOSE 79.4%). Las confianzas de las Figs. 16 –17 contradicen el texto (0.91/0.98 vs 
+'1.00/0.90').  
+• Validación estadística inexistente. n=316 imágenes de un número no declarado de sujetos; un 
+único split 80/20 sin validación cruzada, sin intervalos de confianza, sin repeticiones con 
+distintas semillas, sin test estadístico. No se puede afirmar generaliza ción con dos frames de 
+'otro sujeto'.  
+• Dataset minúsculo y mal caracterizado. No se declara el número de participantes, su 
+diversidad (tono de piel, mano dominante), ni el protocolo de captura reproducible; sin esto, el 
+riesgo de fuga de datos (data leakage) sujeto -a-split es alto.  IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 3 Mi diagnóstico es que el manuscrito es honesto y el prototipo funciona, pero el aporte tal como está 
+formulado no alcanza el umbral de novedad y rigor de IDEAL. Lo realmente defendible no es 
+'integramos MediaPipe con un ESP32 -CAM', sino, potencialmente: (1 ) una comparación empírica 
+controlada y reproducible entre reconocimiento landmark -based on -host y detección FOMO on -
+device bajo condiciones idénticas, con métricas de latencia, energía, exactitud y robustez; (2) un 
+análisis de los trade -offs precisión -latencia -memoria -energía que oriente decisiones de diseño en 
+edge AI; y (3) un dataset embebido caracterizado y liberado. Ese mensaje, sin embargo, no está 
+construido: la comparación formal entre rutas se relega explícitamente a 'future work'.  
+Este informe presenta 38 comentarios línea por línea organizados por sección, 10 preguntas 
+dirigidas que la carta de respuesta debe abordar, y una hoja de ruta priorizada en tres bloques. Si 
+las autoras ejecutan íntegramente el Bloque 1 (Mayores) y al meno s el 75 % del Bloque 2 
+(Moderados), considero que el manuscrito puede pasar de un rechazo probable a una contribución 
+competitiva.  
+Cordialmente,  
+Revisor del Comité de Programa — IDEAL 2026  
+  IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 4 Resumen ejecutivo  
+Recomendación cuantitativa  
+Severidad  Cantidad  Significado y acción esperada  
+Mayor (M)  14 Bloqueante. Resolver antes del envío. Sin estos cambios, alta probabilidad 
+de rechazo por novedad/rigor.  
+Moderado (m)  14 Resolver o justificar explícitamente en la carta de respuesta. Necesario para 
+una recomendación de aceptación.  
+Menor (n)  10 Estilo, formato, consistencia, edición. Resolver en la mayoría; justificar 
+excepciones.  
+Mensajes principales para las autoras  
+1. Reposicionar la contribución hacia el análisis, no la integración. IDEAL no premia 'conectar A 
+con B'. Convertir el paper en un estudio comparativo controlado host -vs-edge con un eje de 
+análisis claro (trade -off exactitud/latencia/energía/memoria) o en una  propuesta metodológica 
+concreta. (C -04, C -07, C -31) 
+2. Construir la comparación cuantitativa que hoy falta. Tabla comparativa contra estado del arte y 
+baselines, y comparación formal entre las dos rutas bajo condiciones idénticas, con la misma 
+métrica y los mismos datos. (C -09, C -11, C -31) 
+3. Introducir rigor estadístico. Validación cruzada por sujeto (no por imagen), repeticiones multi -
+semilla, intervalos de confianza y un test apropiado. Declarar el número de participantes. (C -
+13, C -14, C -25) 
+4. Eliminar las inconsistencias internas. Unificar dos vs tres clases (la clase 'Index' fantasma), 
+reconciliar las matrices de confusión y las confianzas de las figuras con el texto. Estas 
+contradicciones, por sí solas, motivan rechazo. (C -19, C -26, C -27) 
+5. Caracterizar y, preferentemente, liberar el dataset. Número de sujetos, diversidad, protocolo, y 
+split sin fuga sujeto -a-partición; valor de reutilización. (C -13, C -12) 
+6. Medir energía y memoria de forma rigurosa, no solo tiempo. En edge AI, el consumo 
+energético y el footprint son ejes de primer orden; hoy solo se reporta RAM/flash de Edge 
+Impulse y un único valor de latencia. (C -22, C -30) 
+7. Justificar y analizar la latencia de 981 ms. Es alta para HMI en tiempo real; explicar el cuello 
+de botella (resolución, cuantización, frecuencia de reloj) y explorar optimizaciones, no solo 
+declararla como limitación. (C -23, C -30) 
+Distribución de comentarios por sección  
+Sección del manuscrito  Mayor  Moderado  Menor  
+Título, palabras clave y abstract  1 2 2 
+Introducción y contribuciones  2 1 1 
+Estado del arte / related work  2 1 0 
+Materiales y métodos: datos, modelo, despliegue  5 4 2 
+Resultados y discusión  3 4 2 IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 5 Sección del manuscrito  Mayor  Moderado  Menor  
+Conclusión, formato y reproducibilidad  1 2 1 
+  IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 6 Comentarios línea por línea  
+1. Título, palabras clave y resumen  
+C-01 · Título · Moderado  
+Observación: El título ('A Dual Approach for Optimized Hand Gesture Recognition…') usa 'Optimized' sin que 
+el manuscrito presente ninguna optimización formal: no hay búsqueda de hiperparámetros, ni estudio de 
+cuantización comparativa, ni Pareto -front exactitud/latencia . El término sobre -promete.  
+Por qué es una debilidad: Un revisor de IDEAL espera que 'optimized' implique un procedimiento de 
+optimización medible; su ausencia genera fricción desde la primera línea y sugiere imprecisión terminológica.  
+Acción requerida: Sustituir 'Optimized' por una formulación fiel, p. ej. 'A Comparative Study of Host -Based 
+MediaPipe and On -Device FOMO Hand -Gesture Recognition for Low -Cost Robotic Actuation', anclando el 
+aporte en la comparación y no en una optimización inexistente.  
+C-02 · Keywords · Menor  
+Observación: Las palabras clave ('MediaPipe; AI Edge; hand gesture recognition; ESP32 -CAM; FOMO; Edge 
+Impulse; low -cost hardware prototype') son nombres de productos/herramientas, no descriptores científicos 
+indexables que ubiquen el trabajo en el ámbito de IDEAL.  
+Por qué es una debilidad: Una lista sesgada a marcas reduce la recuperabilidad y señala al revisor un 
+enfoque de ingeniería de producto más que de aprendizaje automatizado.  
+Acción requerida: Incluir descriptores conceptuales: 'tiny machine learning', 'edge inference', 'human -machine 
+interaction', 'embedded deep learning', 'latency -accuracy trade -off'. Mantener 6 –8 keywords.  
+C-03 · Abstract — alcance · Mayor  
+Observación: El abstract describe lo que el sistema hace (integración) pero no formula una pregunta científica 
+ni un hallazgo cuantitativo comparativo. Anuncia métricas ('completeness, accuracy, F1, confidence, confusion 
+matrix') sin dar un solo número, y no declara cu ál es la novedad frente al estado del arte.  
+Por qué es una debilidad: En IDEAL, un abstract sin pregunta de investigación, sin número clave y sin 
+novedad explícita correlaciona fuertemente con rechazo temprano. El lector no puede distinguir este trabajo de 
+un tutorial de integración.  
+Acción requerida: Reescribir en torno a: (1) pregunta ('¿cómo se comparan, bajo condiciones idénticas, el 
+reconocimiento landmark on -host y la detección FOMO on -device en exactitud, latencia, memoria y energía?'); 
+(2) el hallazgo cuantitativo principal; (3) la implicación d e diseño. Incluir el F1=83.8 % y la latencia de 981 ms 
+en el resumen.  
+C-04 · Abstract — claim de contribución · Moderado  
+Observación: El abstract presenta el aporte como 'mostrar que un método basado en computador puede 
+complementarse con una versión hardware de bajo consumo'. Esto es una afirmación de viabilidad, no una 
+contribución de conocimiento.  
+Por qué es una debilidad: La 'viabilidad' de integrar componentes maduros no es novedad publicable en un 
+congreso competitivo de ML; es el punto de partida esperado.  
+Acción requerida: Declarar una contribución verificable: un análisis de trade -offs cuantificado, una 
+recomendación de diseño basada en evidencia, o un artefacto reutilizable (dataset/benchmark). Ver C -31. 
+2. Introducción y contribuciones  
+C-05 · Sec. 1 — gap de investigación · Mayor  IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 7 Observación: La introducción motiva el problema (latencia, dependencia de la nube, costo) pero no articula 
+un gap de investigación abierto ni una hipótesis. Salta de 'existen dos enfoques' a 'los integramos', sin explicar 
+qué pregunta científica no resuelta aborda el t rabajo.  
+Por qué es una debilidad: Sin gap explícito, el revisor no puede evaluar la significancia. IDEAL exige que el 
+trabajo se posicione frente a un problema abierto, no frente a una tarea de implementación.  
+Acción requerida: Añadir un párrafo que formule la pregunta abierta (p. ej. la falta de comparaciones 
+controladas host -vs-edge bajo el mismo dataset y hardware en HMI gestual de bajo costo) y una o dos 
+hipótesis falsables.  
+C-06 · Sec. 1 — lista de contribuciones ausente · Mayor  
+Observación: La introducción no contiene una lista explícita y enumerada de contribuciones, convención 
+esperada en LNCS. El lector debe inferir qué es nuevo, y lo que infiere (integración + prototipo) no es 
+novedad.  
+Por qué es una debilidad: La ausencia de contribuciones explícitas obliga al revisor a buscarlas, y al no 
+encontrarlas concluye que no las hay. Es una de las causas más rápidas de rechazo.  
+Acción requerida: Añadir 'Our contributions are:' con 3 –4 ítems verificables y defendibles tras la 
+reestructuración (comparación controlada, análisis de trade -offs, dataset caracterizado, hallazgos de diseño 
+edge).  
+C-07 · Sec. 1 — encuadre como ML, no como ingeniería · Menor  
+Observación: El lenguaje es de proyecto de ingeniería ('low -cost robotic hand prototype', 'servo -based 
+physical response') más que de investigación en aprendizaje. El componente de aprendizaje (entrenamiento 
+FOMO) ocupa un papel secundario.  
+Por qué es una debilidad: IDEAL es un foro de automated learning; un encuadre de ingeniería de hardware 
+desorienta sobre el fit.  
+Acción requerida: Reencuadrar la introducción para que el aprendizaje (modelo, datos, evaluación, 
+generalización edge) sea el eje, y el prototipo el banco de pruebas, no el fin.  
+3. Estado del arte y posicionamiento  
+C-08 · Sec. 2 / Tablas 1 –3 — SOTA descriptivo · Mayor  
+Observación: Las tres tablas de estado del arte enumeran trabajos con columnas 'Focus / Approach / 
+Relevance' pero sin una sola métrica numérica ni una comparación cuantitativa. El related work es una 
+enumeración ('X hizo Y'), no un análisis crítico.  
+Por qué es una debilidad: Sin métricas reportadas de trabajos previos, el lector no puede situar un F1 de 
+0.84 en el estado del arte. Un revisor lo leerá como ausencia de comparación, objeción recurrente y 
+bloqueante.  
+Acción requerida: Añadir, en al menos una tabla, columnas con dataset, métrica principal y valor reportado 
+por cada trabajo cercano (precisión/F1, latencia, plataforma). Reescribir cada entrada con el patrón: 'el trabajo 
+X reportó Z PERO carece de A; el presente trabajo abo rda A'.  
+C-09 · Sec. 2 — ausencia de comparación con TinyML gestual · Mayor  
+Observación: Existe literatura específica de reconocimiento de gestos en microcontroladores y de 
+benchmarking TinyML (incluida una de las propias referencias, Heydari & Mahmoud 2025) que no se usa para 
+comparar cuantitativamente. No se compara FOMO contra alternativas embebidas (p. ej. MobileNet 
+cuantizado, modelos TFLite -Micro propios).  IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 8 Por qué es una debilidad: Sin baseline embebido alternativo, no se puede afirmar que FOMO sea una buena 
+elección; la decisión de arquitectura queda injustificada empíricamente.  
+Acción requerida: Incluir al menos un baseline embebido alternativo bajo el mismo dataset y hardware (p. ej. 
+un clasificador TFLite -Micro o un detector cuantizado distinto), y comparar exactitud, latencia, RAM, flash y 
+energía.  
+C-10 · Sec. 2 — posicionamiento de novedad · Moderado  
+Observación: El manuscrito no declara en qué se diferencia de los híbridos MediaPipe+clasificador ya citados 
+(Padhi & Das; Liao et al.). La combinación 'MediaPipe on -host + FOMO on -device' no se contrasta con esos 
+antecedentes.  
+Por qué es una debilidad: La novedad incremental debe demostrarse explícitamente frente a lo más cercano; 
+de lo contrario se asume inexistente.  
+Acción requerida: Añadir un párrafo de delta -de-novedad que explicite qué aporta el enfoque dual frente a 
+cada antecedente híbrido.  
+4. Materiales y métodos  
+C-11 · Sec. 3.1 — comparación entre rutas relegada · Mayor  
+Observación: Las dos rutas (MediaPipe on -host, FOMO on -device) se describen por separado y nunca se 
+comparan bajo condiciones idénticas. La comparación formal se difiere explícitamente a future work (Sec. 4.4: 
+'a more formal comparison… should be included').  
+Por qué es una debilidad: La comparación es, potencialmente, el único aporte de valor del trabajo; relegarla 
+a future work vacía el manuscrito de contribución. Las dos rutas además ni siquiera detectan las mismas 
+clases ni usan el mismo protocolo.  
+Acción requerida: Ejecutar la comparación dentro de este paper: mismos gestos, mismos 
+sujetos/condiciones, mismas métricas (exactitud, latencia extremo -a-extremo, memoria, energía, estabilidad). 
+Es el cambio estructural de mayor retorno.  
+C-12 · Sec. 3.2.4 — dataset: tamaño y procedencia · Mayor  
+Observación: El dataset FOMO es de 316 imágenes (161 open / 155 close), split 80/20 (253/63). No se 
+declara el número de participantes, su diversidad demográfica, ni cómo se evitó la fuga sujeto -a-split. Las 
+imágenes de un mismo sujeto/sesión podrían estar en train y t est. 
+Por qué es una debilidad: Con un split por imagen y sin separación por sujeto, las métricas pueden estar 
+infladas por memorización de fondo/manos del mismo sujeto. 316 imágenes es, además, insuficiente para 
+afirmar generalización.  
+Acción requerida: Declarar número de sujetos y protocolo; rehacer el split por sujeto (subject -wise) o por 
+sesión; ampliar el dataset; y validar con sujetos no vistos. Reportar la composición exacta de train/val/test por 
+sujeto.  
+C-13 · Sec. 3.2.4 / 3.5 — sin validación cruzada ni repeticiones · Mayor  
+Observación: Se entrena una sola vez con un único split 80/20, 100 épocas, lr=0.001, batch=128. No hay k -
+fold, ni repeticiones con distintas semillas, ni intervalos de confianza. El F1=83.8 % es un punto único sin 
+incertidumbre.  
+Por qué es una debilidad: Una métrica puntual sin varianza no es evaluable: no se sabe si 83.8 % es estable 
+o producto del azar del split. IDEAL valora el rigor empírico.  
+Acción requerida: Reportar k -fold (o al menos múltiples semillas) con media ± desviación e intervalos de 
+confianza para todas las métricas clave. Comparar rutas y baselines bajo este protocolo.  IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 9 C-14 · Sec. 3.3 / Fig. 5 — FOMO con 3 clases declaradas pero 2 entrenadas · Mayor  
+Observación: El pipeline (Fig. 5) y la Sec. 3.3 describen dos clases (open/close), pero la Sec. 3.7 y la Tabla 7 
+evalúan 'Close, Open, or Index'. La clase 'Index' nunca se define, ni se incluye en el dataset, ni aparece en la 
+matriz de confusión.  
+Por qué es una debilidad: Una clase fantasma en el protocolo de evaluación sugiere descuido o reutilización 
+no depurada de plantillas; mina la confianza en todo el aparato experimental.  
+Acción requerida: Decidir el número de clases y aplicarlo consistentemente en dataset, entrenamiento, 
+métricas y figuras. Si 'Index' no se entrena, eliminar toda mención.  
+C-15 · Sec. 3.2.2/3.2.3 — umbrales geométricos sin justificación · Moderado  
+Observación: Los umbrales de histéresis (−0.015/0.035 para dedos; −0.005/0.02 para pulgar) y el umbral de 
+confianza 0.60 se presentan como valores fijos sin derivación, sin análisis de sensibilidad y sin validación.  
+Por qué es una debilidad: Umbrales 'mágicos' sin justificación parecen ajustados a mano sobre los datos de 
+prueba, lo que es una forma de sobreajuste no controlado.  
+Acción requerida: Justificar los umbrales (sobre un conjunto de calibración separado) y reportar la 
+sensibilidad del desempeño a su variación (curvas de barrido).  
+C-16 · Sec. 3.4 — augmentación y posible fuga · Moderado  
+Observación: Se aplica data augmentation (brillo, rotaciones, desplazamientos, zoom). No se aclara si la 
+augmentación se aplica solo a train (correcto) o también afecta a las particiones de validación, ni cómo 
+interactúa con el split por imagen.  
+Por qué es una debilidad: Augmentar antes de separar, o separar por imagen y no por sujeto, infla las 
+métricas.  
+Acción requerida: Confirmar explícitamente que la augmentación se aplica solo tras el split y solo a train; 
+documentar el orden de operaciones.  
+C-17 · Sec. 3.5 — un único valor de latencia · Moderado  
+Observación: La latencia de inferencia (981 ms) se reporta como valor único, sin distribución (media, 
+desviación, percentiles) ni desglose por etapa (captura, resize, inferencia, I2C, actuación).  
+Por qué es una debilidad: Sin distribución ni desglose, no se puede razonar sobre el cuello de botella ni 
+sobre la variabilidad de la respuesta.  
+Acción requerida: Reportar latencia con estadísticos sobre múltiples inferencias y desglose por etapa del 
+pipeline; separar inferencia pura de comunicación y actuación.  
+C-18 · Sec. 3.4/3.6 — código y configuración no liberados · Menor  
+Observación: Se describen el impulso (96×96 RGB, FOMO MobileNetV2 0.35) y los hiperparámetros, pero no 
+hay enlace a repositorio, modelo exportado, dataset ni script reproducible.  
+Por qué es una debilidad: La reproducibilidad es un criterio creciente; su ausencia resta puntos y dificulta la 
+verificación.  
+Acción requerida: Liberar código, modelo .eim/.tflite, dataset y un README reproducible (p. ej. 
+Zenodo/GitHub con DOI).  
+C-19 · Sec. 3.7 — métricas heredan la inconsistencia de clases · Menor  
+Observación: La Tabla 7 define precisión/recall/F1/matriz de confusión sobre 'Close, Open, or Index', 
+arrastrando la clase fantasma de C -14 a toda la definición de métricas.  IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 10 Por qué es una debilidad: Definir métricas sobre una clase inexistente confunde y resta credibilidad.  
+Acción requerida: Reescribir la Tabla 7 con las clases realmente evaluadas.  
+5. Resultados y discusión  
+C-20 · Sec. 4 — comparación host -vs-edge solo cualitativa · Mayor  
+Observación: El único contraste entre rutas es verbal ('la respuesta fue más lenta en la ruta FOMO'). No hay 
+una tabla que enfrente, con números, exactitud, latencia, memoria y energía de ambas rutas sobre los mismos 
+gestos.  
+Por qué es una debilidad: El lector no puede cuantificar el trade -off central que el propio título insinúa ('dual 
+approach'). El aporte queda como impresión, no como evidencia.  
+Acción requerida: Añadir una tabla comparativa cabeza -a-cabeza host -vs-edge con todas las métricas y, si 
+procede, un diagrama de trade -off (exactitud vs latencia vs energía).  
+C-21 · Sec. 4.2/4.4 — matriz de confusión inconsistente · Mayor  
+Observación: La Sec. 4.2 reporta CLOSE 78.6 % (21.4 % confundido con fondo) y OPEN 81.5 %. La Sec. 4.4 
+reporta CLOSE 79.4 % (20.6 % fondo) y OPEN 81.5 %. Los dos valores de CLOSE son incompatibles para la 
+misma matriz.  
+Por qué es una debilidad: Cifras contradictorias para el mismo experimento son un fallo de control de calidad 
+que un revisor marcará de inmediato y que erosiona la confianza en todos los demás números.  
+Acción requerida: Reconciliar y reportar una única matriz de confusión verificable; auditar todas las cifras del 
+manuscrito contra la fuente (Edge Impulse) para coherencia.  
+C-22 · Sec. 4 — ausencia de medición de energía · Mayor  
+Observación: Para un trabajo de AI Edge de bajo consumo, no se mide el consumo energético (mA/mW por 
+inferencia, autonomía con la batería declarada). Solo se reportan RAM/flash de Edge Impulse.  
+Por qué es una debilidad: La energía es un eje central del edge AI; omitirla deja sin sustento el argumento 
+'low-power' del título y del abstract.  
+Acción requerida: Medir corriente/potencia por inferencia y en reposo; estimar autonomía. Incluir energía en 
+la comparación host -vs-edge.  
+C-23 · Sec. 4.4/4.5 — latencia de 981 ms sin análisis causal · Moderado  
+Observación: Los 981 ms se declaran y se lamentan como limitación, pero no se analiza la causa (resolución 
+96×96, MobileNetV2 0.35, reloj del ESP32, int8) ni se exploran mitigaciones (menor resolución de entrada, 
+poda, frecuencia de CPU, modelo alternativo).  
+Por qué es una debilidad: Sin análisis causal ni intento de optimización, la contribución de ingeniería 
+tampoco se materializa; queda como una observación pasiva.  
+Acción requerida: Diagnosticar el cuello de botella y reportar al menos un experimento de optimización con 
+su efecto en latencia y exactitud.  
+C-24 · Sec. 4.2 — F1=83.8 % sin contexto comparativo · Moderado  
+Observación: El F1=83.8 % se presenta de forma aislada, sin comparación con baselines ni con la literatura, 
+y sin intervalo de confianza (ligado a C -13 y C -08). 
+Por qué es una debilidad: Un número sin referencia no permite juzgar si es bueno o mediocre para la tarea.  
+Acción requerida: Contextualizar frente a baselines y SOTA, con incertidumbre; discutir si 83.8 % es 
+suficiente para la aplicación pretendida.  IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 11 C-25 · Sec. 4.2 — 'generaliza' con n=2 frames · Moderado  
+Observación: Se afirma que el modelo 'generaliza más allá de las condiciones de entrenamiento' a partir de 
+dos frames de un único sujeto adicional (Figs. 16 –17). 
+Por qué es una debilidad: Dos imágenes no sustentan ninguna afirmación de generalización; es una sobre -
+interpretación estadísticamente vacía.  
+Acción requerida: Evaluar sobre un conjunto de sujetos no vistos con tamaño adecuado y reportar métricas 
+agregadas; retirar la afirmación hasta tenerlas.  
+C-26 · Figs. 14–17 — confianzas contradicen el texto · Moderado  
+Observación: El texto (Sec. 4.2) afirma confianzas de 1.00 (open) y 0.95 (close), y para el segundo sujeto 
+'1.00 y 0.90'; pero las Figs. 16 –17 muestran 0.91 (open) y 0.98 (close). Los pares no coinciden.  
+Por qué es una debilidad: La discordancia texto -figura es un fallo de consistencia que, sumado a C -21, 
+sugiere falta de verificación cruzada.  
+Acción requerida: Corregir para que texto, pies de figura y valores en imagen coincidan exactamente.  
+C-27 · Sec. 4.2 — '466 imágenes negativas' no trazables · Menor  
+Observación: La discusión de falsos positivos del informe de referencia menciona 63/466 negativos, pero en 
+este manuscrito el dataset declarado es de 316 imágenes; aparecen conteos (p. ej. el subconjunto de prueba 
+de 63) cuyo origen no se traza claramente en el cuerpo.  
+Por qué es una debilidad: Conteos no trazables al dataset declarado confunden y abren dudas sobre la 
+procedencia de los datos de evaluación.  
+Acción requerida: Trazar explícitamente cada conteo (train/val/test, positivos/negativos) al dataset declarado 
+en una única tabla de composición de datos.  
+C-28 · Sec. 4.4 — atribución de fallos sin evidencia controlada · Menor  
+Observación: Se atribuyen los errores a iluminación, fondo, distancia y resolución, pero sin un experimento 
+controlado que aísle cada factor (ablation de condiciones).  
+Por qué es una debilidad: Las explicaciones plausibles sin evidencia controlada son especulación; IDEAL 
+valora la atribución empírica.  
+Acción requerida: Diseñar un pequeño estudio factorial (iluminación × distancia × fondo) para cuantificar el 
+efecto de cada factor en el F1.  
+6. Conclusión, reproducibilidad y formato  
+C-29 · Sec. 5 — conclusión sin hallazgo cuantitativo · Mayor  
+Observación: La conclusión reitera que ambos enfoques 'pueden trabajar juntos' y que el prototipo 'fue 
+funcional', sin destilar un hallazgo cuantitativo, una recomendación de diseño ni una lección generalizable.  
+Por qué es una debilidad: Una conclusión sin hallazgo confirma la percepción de que el trabajo es una 
+demostración de integración, no investigación.  
+Acción requerida: Cerrar con el hallazgo cuantitativo principal (el trade -off medido) y una recomendación 
+accionable de diseño para HMI gestual en edge de bajo costo.  
+C-30 · Sec. 4.5 — future work hace el trabajo del paper · Moderado  
+Observación: La sección de trabajo futuro lista justamente lo que haría publicable el paper: comparación 
+formal entre rutas, más clases, más sujetos, optimización de latencia. Es decir, el aporte real está diferido.  IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 12 Por qué es una debilidad: Cuando el future work contiene la contribución, el manuscrito presente carece de 
+ella. 
+Acción requerida: Migrar al cuerpo del paper, como resultados, la comparación formal y al menos una 
+optimización de latencia; dejar en future work solo extensiones genuinas.  
+C-31 · Global — reposicionamiento del aporte · Moderado  
+Observación: El manuscrito necesita un eje de contribución único y defendible. Hoy es 'integramos y 
+funciona'; debería ser 'analizamos y aprendimos X que orienta el diseño'.  
+Por qué es una debilidad: Sin eje de contribución, ningún arreglo cosmético salvará la evaluación de 
+novedad/significancia.  
+Acción requerida: Elegir y ejecutar uno de: (A) estudio comparativo host -vs-edge con trade -offs; (B) 
+propuesta metodológica (p. ej. fusión de las dos rutas con conmutación adaptativa según confianza/energía); 
+(C) benchmark + dataset embebido liberado y caracterizado.  
+C-32 · Formato — cumplimiento LNCS y longitud · Menor  
+Observación: El manuscrito está en plantilla MDPI ('Journal Not Specified'), no en Springer LNCS/LNAI, y con 
+19 páginas y ~30 figuras/tablas excede con holgura el límite de IDEAL (9 –12 páginas incluidas referencias).  
+Por qué es una debilidad: El incumplimiento de formato y longitud puede provocar rechazo administrativo 
+(desk -reject) antes de la revisión técnica.  
+Acción requerida: Migrar a la plantilla LNCS oficial y recortar a ≤12 páginas (idealmente 9), consolidando 
+figuras y tablas y moviendo material secundario a un apéndice/repositorio.  
+C-33 · Inglés científico y consistencia terminológica · Menor  
+Observación: Hay deslices terminológicos ('completeness' por recall; 'backgroundless classes' por non -
+background) y mezcla de 'accuracy/precision'. Algunas frases son largas y la nomenclatura de clases es 
+inconsistente (Close/close, Open/open).  
+Por qué es una debilidad: La imprecisión terminológica en métricas de ML es especialmente penalizada en 
+un foro de aprendizaje.  
+Acción requerida: Edición de inglés científico; usar la terminología estándar (precision, recall, F1) de forma 
+consistente; unificar nombres de clases y siglas en su primera aparición.  
+  IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 13 Preguntas específicas para las autoras  
+Las siguientes 10 preguntas deben responderse explícitamente en la carta de respuesta. Algunas 
+exigen experimentos adicionales; otras solo aclaraciones.  
+8. ¿Cuál es la contribución científica que distingue este trabajo de los híbridos 
+MediaPipe+clasificador ya publicados (Padhi & Das; Liao et al.) y de los despliegues 
+FOMO/Edge Impulse existentes? (C -04, C -06, C -10, C -31) 
+9. ¿Cuántos participantes componen el dataset de 316 imágenes y cómo se garantizó que no 
+haya fuga sujeto -a-split entre train y test? (C -12) 
+10. ¿Pueden reportar todas las métricas con validación cruzada (o múltiples semillas) e 
+intervalos de confianza, en lugar de un único split 80/20? (C -13) 
+11. ¿Qué es la clase 'Index' que aparece en la Sec. 3.7 y la Tabla 7? ¿Está en el dataset y en la 
+matriz de confusión, o es un residuo a eliminar? (C -14, C -19) 
+12. ¿Por qué los porcentajes de CLOSE difieren entre la Sec. 4.2 (78.6 %) y la Sec. 4.4 (79.4 
+%)? ¿Cuál es la matriz de confusión correcta? (C -21) 
+13. ¿Por qué las confianzas del texto (1.00/0.95; 1.00/0.90) no coinciden con las de las Figs. 
+16–17 (0.91/0.98)? (C -26) 
+14. ¿Pueden ejecutar dentro del paper la comparación formal host -vs-edge bajo condiciones 
+idénticas (mismos gestos, sujetos, métricas), hoy relegada a future work? (C -11, C -20, C -30) 
+15. ¿Cuál es el consumo energético por inferencia y la autonomía con la batería declarada? 
+¿Cómo se compara con la ruta host? (C -22) 
+16. ¿Cuál es la causa de los 981 ms de inferencia y qué efecto tendrían optimizaciones 
+(resolución, poda, reloj, modelo alternativo) sobre latencia y exactitud? (C -23, C -30) 
+17. ¿Liberarán código, modelo exportado y dataset caracterizado para reproducibilidad? ¿Bajo 
+qué licencia? (C -18) 
+  IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 14 Hoja de ruta priorizada para aceptación  
+La siguiente lista organiza los cambios en tres bloques de prioridad. Si las autoras completan el 
+Bloque 1 íntegro y ≥75 % del Bloque 2, la probabilidad de aceptación tras revisión en IDEAL es 
+razonable. Esfuerzo estimado: 6 –10 semanas.  
+Bloque 1 — Imprescindibles (sin estos no hay aceptación)  
+1. Reposicionar el aporte de 'integración' a 'análisis/propuesta': elegir y ejecutar un eje de 
+contribución (comparación host -vs-edge con trade -offs, fusión adaptativa, o 
+benchmark+dataset). (C -04, C -06, C -31) 
+2. Ejecutar la comparación cuantitativa host -vs-edge bajo condiciones idénticas, con tabla 
+cabeza -a-cabeza (exactitud, latencia, memoria, energía, estabilidad). (C -11, C -20, C -30) 
+3. Introducir rigor estadístico: validación cruzada/semillas múltiples, intervalos de confianza y test 
+apropiado; declarar el número de sujetos. (C -13, C -12) 
+4. Eliminar inconsistencias internas: clase 'Index' fantasma, matrices de confusión discordantes y 
+confianzas figura -vs-texto. (C -14, C -21, C -26, C -19) 
+5. Rehacer el split por sujeto/sesión y ampliar/caracterizar el dataset para sustentar 
+generalización. (C -12, C -25) 
+6. Añadir comparación cuantitativa con SOTA y con al menos un baseline embebido alternativo. 
+(C-08, C -09, C -24) 
+7. Medir y reportar consumo energético por inferencia y autonomía. (C -22) 
+8. Migrar a plantilla LNCS y recortar a ≤12 páginas. (C -32) 
+Bloque 2 — Altamente recomendados (mejoran calidad y respondibilidad)  
+1. Formular gap de investigación, hipótesis y lista explícita de contribuciones en la introducción. 
+(C-05, C -06) 
+2. Reescribir el abstract con pregunta, número clave y novedad explícita. (C -03) 
+3. Justificar umbrales (histéresis, confianza 0.60) sobre conjunto de calibración y reportar 
+sensibilidad. (C -15) 
+4. Diagnosticar y optimizar la latencia de 981 ms con al menos un experimento. (C -23) 
+5. Reportar latencia con distribución y desglose por etapa. (C -17) 
+6. Estudio factorial de condiciones (iluminación × distancia × fondo) para atribuir fallos 
+empíricamente. (C -28) 
+7. Confirmar el orden augmentación -tras-split y documentarlo. (C -16) 
+8. Reescribir el estado del arte con análisis crítico trabajo -por-trabajo y métricas numéricas. (C -
+08, C -10) 
+Bloque 3 — Estilo, edición y formato (cumplir mayoría)  
+1. Reformular el título eliminando 'Optimized' si no hay optimización formal. (C -01) 
+2. Ajustar palabras clave a descriptores conceptuales (TinyML, edge inference, HMI). (C -02) 
+3. Liberar código, modelo y dataset con DOI. (C -18) IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 15 4. Edición de inglés científico y consistencia terminológica de métricas y clases. (C -33) 
+5. Trazar todos los conteos de datos a una única tabla de composición. (C -27) 
+6. Reencuadrar el lenguaje hacia aprendizaje automatizado y no ingeniería de hardware. (C -07) 
+7. Asegurar figuras ≥300 dpi, legibles y autocontenidas tras la migración a LNCS. (C -32) 
+  IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 16 Estimación de tiempo y esfuerzo  
+Asumiendo acceso al hardware ya utilizado (ESP32 -CAM, prototipo, Edge Impulse) y al pipeline 
+implementado, los cambios del Bloque 1 son alcanzables en 6 –10 semanas:  
+Tarea  Esfuerzo  Tiempo estimado  
+Reposicionamiento del aporte + reescritura del marco 
+(intro, abstract, conclusión)  Bajo (sin re -experimentar)  1–2 semanas  
+Comparación host -vs-edge bajo condiciones idénticas (re -
+captura + medición)  Medio -Alto 2–3 semanas  
+Validación cruzada / multi -semilla + intervalos de 
+confianza  Medio  4–6 días  
+Ampliación y re -split por sujeto del dataset  Medio (depende de 
+captura)  1–2 semanas  
+Baseline embebido alternativo + tabla SOTA con métricas  Medio  4–6 días  
+Medición de energía por inferencia y autonomía  Bajo 2–3 días  
+Diagnóstico y optimización de latencia (≥1 experimento)  Medio  3–5 días  
+Corrección de inconsistencias (clases, matrices, 
+confianzas)  Bajo 1–2 días  
+Migración a LNCS, recorte a ≤12 páginas y carta de 
+respuesta  Bajo-Medio  1–2 semanas  
+TOTAL estimado  — 6–10 semanas  
+  IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 17 Síntesis final y recomendación  
+Principales fortalezas del manuscrito  
+• Prototipo físico funcional end -to-end: del gesto a la actuación de cinco servos, con dos rutas 
+implementadas y operativas.  
+• Honestidad al reportar limitaciones (latencia de 981 ms, confusión con fondo, sensibilidad a 
+iluminación), poco común en trabajos aplicados.  
+• Pipeline de control on -host bien descrito: lógica geométrica de estados de dedo con filtro de 
+histéresis y umbrales asimétricos razonados.  
+• Tema de interés real (HMI gestual de bajo costo en edge) y motivación práctica clara 
+(independencia de la nube, costo, latencia).  
+• Despliegue embebido genuino con cuantización int8 (EON) que cabe en las restricciones del 
+ESP32 -CAM.  
+Principales debilidades  
+• Novedad insuficiente: integración de componentes maduros sin delta metodológico; la 
+contribución declarada es ingeniería estándar.  
+• Comparación host -vs-edge —el aporte potencial — relegada a future work; no hay tabla 
+cuantitativa que la sustente.  
+• Sin comparación con estado del arte ni baselines; related work meramente descriptivo y sin 
+métricas.  
+• Rigor estadístico ausente: split único por imagen, sin CV, sin intervalos de confianza, sin test; 
+n=316 sin sujetos declarados.  
+• Inconsistencias internas serias: clase 'Index' fantasma, matrices de confusión discordantes, 
+confianzas figura -vs-texto.  
+• Sin medición de energía pese al encuadre 'low -power'; latencia alta sin análisis causal ni 
+optimización.  
+• Incumplimiento de formato y longitud (plantilla MDPI, 19 páginas) frente a LNCS ≤12 páginas.  
+Aspectos críticos que deben corregirse antes del envío  
+De forma no negociable, antes de enviar a IDEAL 2026: (1) reposicionar el aporte de 'integración' a 
+'análisis/propuesta'; (2) ejecutar la comparación cuantitativa host -vs-edge dentro del paper; (3) 
+introducir rigor estadístico (CV, intervalos de confianza,  sujetos declarados, re -split por sujeto); (4) 
+eliminar todas las inconsistencias internas; (5) añadir comparación con SOTA y un baseline 
+embebido; (6) medir energía; (7) migrar a LNCS y recortar a ≤12 páginas. Estos siete puntos 
+concentran el riesgo de re chazo.  
+Probabilidades estimadas  
+Escenario  Probabilidad estimada  Condición  
+Aceptación (tras revisión)  5–10 % Estado actual, sin cambios  
+Aceptación (tras revisión)  45–55 % Si se completa íntegro el Bloque 
+1 y ≥75 % del Bloque 2  IDEAL 2026 — Informe de revisión por pares · Confidencial  
+Página 18 Escenario  Probabilidad estimada  Condición  
+Rechazo (desk -reject por 
+formato/longitud)  Alto si no se migra a LNCS ≤12 
+pp. Estado actual de formato  
+Rechazo (por novedad/rigor)  70–80 % Estado actual, principalmente por 
+falta de novedad y de 
+comparación/estadística  
+Rechazo residual  15–20 % Tras completar el Bloque 1 
+(riesgo remanente por novedad 
+incremental)  
+Nota: estas probabilidades son un juicio cualitativo de revisor, no una predicción calibrada. El factor 
+de mayor incertidumbre es la novedad; si el comité considera el trabajo una integración sin aporte 
+de aprendizaje, el rechazo es probable pese a que el prototipo funcione. Por ello, el Bloque 1 
+(especialmente C -11/C -20 y C -31) es la inversión de mayor retorno.  
+Recomendación final  
+NO ENVIAR TODAVÍA. Recomiendo una revisión mayor (major revision) interna antes del envío 
+oficial a IDEAL 2026. El prototipo es funcional y el reporte de limitaciones es honesto —cualidades 
+reales —, pero en su forma actual el manuscrito presenta un riesgo elevado de rechazo por falta de 
+novedad, ausencia de comparación cuantitativa y rigor estadístico, e inconsistencias internas, 
+además de incumplimiento de formato/longitud.  
+La narrativa correcta y defendible sería: 'Bajo condiciones idénticas de gestos, sujetos y hardware, 
+comparamos cuantitativamente el reconocimiento de gestos landmark -based on -host (MediaPipe) 
+frente a la detección FOMO on -device (ESP32 -CAM), caracterizand o el trade -off exactitud –latencia –
+memoria –energía y derivando recomendaciones de diseño para HMI gestual de bajo costo en el 
+borde; liberamos el dataset embebido y el código para reproducibilidad.' Esta narrativa es 
+alcanzable con el hardware actual tras: (a) reposicionar el aporte; (b) ejecutar la comparación y los 
+baselines; (c) introducir rigor estadístico; (d) corregir inconsistencias; (e) medir energía; (f) cumplir el 
+formato LNCS.  
+Sugiero que las autoras: (a) lean cada uno de los 38 comentarios; (b) preparen una carta de 
+respuesta punto -por-punto citando cada ID; (c) marquen los cambios en el manuscrito; (d) si 
+discrepan con algún comentario, lo justifiquen explícitamente. Con un es fuerzo de 6 –10 semanas 
+siguiendo el Bloque 1, el manuscrito puede convertirse en una contribución competitiva para IDEAL.  
+Cordialmente,  
+Revisor del Comité de Programa — IDEAL 2026  

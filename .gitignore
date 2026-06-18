@@ -1,3 +1,11 @@
 .venv/
 __pycache__/
 calibrator.py
+
+# Build artifacts ESP-IDF
+espressif/build/
+espressif/managed_components/
+espressif/dependencies.lock
+
+# IDE
+.vscode/
