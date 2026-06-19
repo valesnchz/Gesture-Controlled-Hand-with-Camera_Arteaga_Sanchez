@@ -9,3 +9,79 @@ espressif/dependencies.lock
 
 # IDE
 .vscode/
+
+# Datasets intermedios (no usados en el modelo final)
+dataset/
+dataset_fotos/
+dataset_fotos_final/
+dataset_aumentado/
+dataset_aumentado_final/
+dataset_balanceado_aumentado.csv
+dataset_descartadas/
+dataset_2_clases/
+nuevo_dataset/
+fotos_descartadas_brillantes/
+datasetfotos.zip
+Fotos_biomecanica_project_final-export/
+Fotos_biomecanica_project_final-export.zip
+
+# Landmarks CSV (no se usa en el sistema final)
+dataset_landmarks_mano.csv
+
+# Librerías auto-generadas Edge Impulse
+ei-fomo2-arduino-1.0.9-impulse-#4/
+ei-fomo2-arduino-1.0.9-impulse-#4.zip
+ei_lib_temp/
+
+# Código C++ compilado del modelo
+tflite_learn_997823_6_compiled.cpp
+tflite_learn_997823_6_compiled.h
+trained_model_ops_define.h
+
+# Modelo viejo
+modelo_nuevo.tflite.lite
+
+# Textos de revisión internos
+revision_full.txt
+revision_rest.txt
+article_full.txt
+
+# Scripts de prueba y experimentos
+test_gestos_webcam.py
+test_mediapipe_webcam.py
+test_opencv_dnn.py
+test_opencv_inference.py
+probar_modelo.py
+probar_webcam.py
+ejemplo_enviar_clasificacion_mapeada.py
+ejemplo_enviar_serial.py
+
+# Scripts de preprocesamiento de datos
+analizar_fotos.py
+balancear_dataset.py
+capturar_dataset.py
+crear_dataset_2_clases.py
+data_augmentation.py
+etiquetar_nuevo_dataset.py
+extraer_modelo.py
+generar_bounding_boxes.py
+limpiar_brillantes.py
+limpiar_y_aumentar_dataset.py
+recolector_datos_edge_impulse.py
+recolector_fotos.py
+
+# Versiones alternativas del código principal
+mano_robotica.py
+mano_robotica_serial.py
+mano_robotica_sin_modelo.py
+mano_robotica_wifi.py
+mano_robotica_wifi_pura_matematica.py
+mano_robotica_modelo_tflite.py
+
+# Código de prueba cámara
+esp32_camera/
+esp32_camera_test/
+
+# Archivos ZIP varios
+ComposioHQ awesome-claude-skills master image-enhancer.zip
+A_Dual_Approach_for_Optimized_Hand_Gesture_Recognition_Using_MediaPipe_and_AI_Edge_Deployment_with_ESP32_CAM.pdf
